@@ -15,6 +15,26 @@ var tmpQuaternion = new THREE.Quaternion();
 init();
 animate();
 
+var dae, particleLight;
+
+var loader = new THREE.ColladaLoader();
+loader.options.convertUpAxis = true;
+loader.load( './models/monster.dae', function ( collada ) {
+    dae = collada.scene;
+    dae.traverse( function ( child ) {
+        if ( child instanceof THREE.SkinnedMesh ) {
+            var animation = new THREE.Animation( child, child.geometry.animation );
+            animation.play();
+        }
+    } );
+    dae.scale.x = dae.scale.y = dae.scale.z = 0.002;
+    dae.updateMatrix();
+
+    init();
+    animate();
+
+} );
+
 function init() {
     container = document.getElementById( 'container' );
 
@@ -110,6 +130,7 @@ function init() {
     directionalLight.position.set( 1, 1, 0.5 ).normalize();
     scene.add( directionalLight );
 
+    scene.add( dae );
 
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor( 0xbfd1e5 );
@@ -177,6 +198,8 @@ function render() {
     //controls.update( clock.getDelta() );
 
     oculusControl.update( clock.getDelta() );
+    THREE.AnimationHandler.update( clock.getDelta() * 100 );
+
     camera.useQuaternion = true;
     camera.quaternion = new THREE.Quaternion(tmpQuaternion.x, tmpQuaternion.y, tmpQuaternion.z, tmpQuaternion.w);
     // camera.quaternion.normalize();

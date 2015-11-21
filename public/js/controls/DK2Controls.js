@@ -23,7 +23,7 @@ THREE.DK2Controls = function (camera) {
     this.headPos = new THREE.Vector3();
     this.headQuat = new THREE.Quaternion();
 
-    this.translationSpeed = 200;
+    this.translationSpeed = 20000;
 
     this.wasd = {
         left: false,
@@ -93,12 +93,9 @@ THREE.DK2Controls = function (camera) {
         if (sensorData) {
             var id = sensorData.id;
             if (id > this.lastId) {
-                console.log(sensorData.quat, sensorData.position);
                 this.headPos.set(sensorData.position.x * 10 - 0.4, sensorData.position.y * 10 + 1.75, sensorData.position.z * 10 + 10);
-                console.log(this.headPos);
                 this.headQuat.set(sensorData.quat.x, sensorData.quat.y, sensorData.quat.z, sensorData.quat.w);
 
-                console.log(this.headQuat);
                 this.camera.setRotationFromQuaternion(this.headQuat);
                 this.controller.setRotationFromMatrix(this.camera.matrix);
             }
