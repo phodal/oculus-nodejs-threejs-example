@@ -1,115 +1,140 @@
-var camera, scene, renderer;
-var realcamera;
-var guiVisible = true;
-
-var mesh, effect, controls, controls2;
-
-var meshes = [];
-var meshparent = [];
-var meshparent2 = [];
-
-var cols = 50;
-var rows = 30;
-var tot = cols * rows;
+if ( ! Detector.webgl ) {
+    Detector.addGetWebGLMessage();
+    document.getElementById( 'container' ).innerHTML = "";
+}
+var container, stats;
+var camera, controls, scene, renderer;
+var mesh;
+var worldWidth = 128, worldDepth = 128,
+    worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2,
+    data = generateHeight( worldWidth, worldDepth );
 var clock = new THREE.Clock();
-var perlin;
 init();
 animate();
-
-
 function init() {
-
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-
-    perlin = new ImprovedNoise();
-
-    //
-
-    camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1, 5000 );
-    camera.useQuaternion = true;
-    camera.position.x = 200;
-    camera.position.y = 250;
-    camera.position.z = -200;
-
-    scene = new THREE.Scene();
-
-    effect = new THREE.OculusRiftEffect( renderer, {worldScale: 1} );
-    effect.setSize( window.innerWidth, window.innerHeight );
-
+    container = document.getElementById( 'container' );
+    camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
+    camera.position.y = getY( worldHalfWidth, worldHalfDepth ) * 100 + 100;
     controls = new THREE.FirstPersonControls( camera );
-    controls.movementSpeed = 4000;
-    controls.lookSpeed = 3.0;
+    controls.movementSpeed = 1000;
+    controls.lookSpeed = 0.125;
     controls.lookVertical = true;
-
-    controls2 = new THREE.OculusControls( camera );
-
-    document.body.appendChild( renderer.domElement );
-
-    var	hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
-    hemiLight.color.setHSL( 0.6, 1, 0.6 );
-    hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
-    hemiLight.position.set( 0, 500, 0 );
-    scene.add( hemiLight );
-
-    var geometry = new THREE.CubeGeometry( 100, 100, 200 );
-
-    var texture = THREE.ImageUtils.loadTexture( 'js/textures/crate.gif' );
-    texture.anisotropy = renderer.getMaxAnisotropy();
-
-    var material = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0xffffff, shininess: 20, shading: THREE.FlatShading, map: texture } );
-
-    for (var i=0; i<tot; i++) {
-
-        meshparent2[i] = new THREE.Object3D();
-        // meshparent2[i].position.y = 50;
-        scene.add( meshparent2[i] );
-
-        meshparent[i] = new THREE.Object3D();
-        meshparent[i].position.y = 50;
-        meshparent[i].position.x = -50;
-        meshparent2[i].add( meshparent[i] );
-
-        mesh = new THREE.Mesh( geometry, material );
-        meshparent[i].add( mesh );
-        meshes.push(mesh);
-
+    scene = new THREE.Scene();
+    // sides
+    var matrix = new THREE.Matrix4();
+    var pxGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+    pxGeometry.attributes.uv.array[ 1 ] = 0.5;
+    pxGeometry.attributes.uv.array[ 3 ] = 0.5;
+    pxGeometry.rotateY( Math.PI / 2 );
+    pxGeometry.translate( 50, 0, 0 );
+    var nxGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+    nxGeometry.attributes.uv.array[ 1 ] = 0.5;
+    nxGeometry.attributes.uv.array[ 3 ] = 0.5;
+    nxGeometry.rotateY( - Math.PI / 2 );
+    nxGeometry.translate( - 50, 0, 0 );
+    var pyGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+    pyGeometry.attributes.uv.array[ 5 ] = 0.5;
+    pyGeometry.attributes.uv.array[ 7 ] = 0.5;
+    pyGeometry.rotateX( - Math.PI / 2 );
+    pyGeometry.translate( 0, 50, 0 );
+    var pzGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+    pzGeometry.attributes.uv.array[ 1 ] = 0.5;
+    pzGeometry.attributes.uv.array[ 3 ] = 0.5;
+    pzGeometry.translate( 0, 0, 50 );
+    var nzGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
+    nzGeometry.attributes.uv.array[ 1 ] = 0.5;
+    nzGeometry.attributes.uv.array[ 3 ] = 0.5;
+    nzGeometry.rotateY( Math.PI );
+    nzGeometry.translate( 0, 0, -50 );
+    //
+    // BufferGeometry cannot be merged yet.
+    var tmpGeometry = new THREE.Geometry();
+    var pxTmpGeometry = new THREE.Geometry().fromBufferGeometry( pxGeometry );
+    var nxTmpGeometry = new THREE.Geometry().fromBufferGeometry( nxGeometry );
+    var pyTmpGeometry = new THREE.Geometry().fromBufferGeometry( pyGeometry );
+    var pzTmpGeometry = new THREE.Geometry().fromBufferGeometry( pzGeometry );
+    var nzTmpGeometry = new THREE.Geometry().fromBufferGeometry( nzGeometry );
+    for ( var z = 0; z < worldDepth; z ++ ) {
+        for ( var x = 0; x < worldWidth; x ++ ) {
+            var h = getY( x, z );
+            matrix.makeTranslation(
+                x * 100 - worldHalfWidth * 100,
+                h * 100,
+                z * 100 - worldHalfDepth * 100
+            );
+            var px = getY( x + 1, z );
+            var nx = getY( x - 1, z );
+            var pz = getY( x, z + 1 );
+            var nz = getY( x, z - 1 );
+            tmpGeometry.merge( pyTmpGeometry, matrix );
+            if ( ( px !== h && px !== h + 1 ) || x === 0 ) {
+                tmpGeometry.merge( pxTmpGeometry, matrix );
+            }
+            if ( ( nx !== h && nx !== h + 1 ) || x === worldWidth - 1 ) {
+                tmpGeometry.merge( nxTmpGeometry, matrix );
+            }
+            if ( ( pz !== h && pz !== h + 1 ) || z === worldDepth - 1 ) {
+                tmpGeometry.merge( pzTmpGeometry, matrix );
+            }
+            if ( ( nz !== h && nz !== h + 1 ) || z === 0 ) {
+                tmpGeometry.merge( nzTmpGeometry, matrix );
+            }
+        }
     }
+    var geometry = new THREE.BufferGeometry().fromGeometry( tmpGeometry );
+    geometry.computeBoundingSphere();
+    var texture = THREE.ImageUtils.loadTexture( './js/textures/minecraft/atlas.png' );
+    texture.magFilter = THREE.NearestFilter;
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
+    var mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { map: texture } ) );
+    scene.add( mesh );
+    var ambientLight = new THREE.AmbientLight( 0xcccccc );
+    scene.add( ambientLight );
+    var directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
+    directionalLight.position.set( 1, 1, 0.5 ).normalize();
+    scene.add( directionalLight );
+    renderer = new THREE.WebGLRenderer();
+    renderer.setClearColor( 0xbfd1e5 );
+    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    container.innerHTML = "";
+    container.appendChild( renderer.domElement );
+    stats = new Stats();
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.top = '0px';
+    container.appendChild( stats.domElement );
+    //
     window.addEventListener( 'resize', onWindowResize, false );
-    document.addEventListener('keydown', keyPressed, false);
 }
-
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    realcamera.aspect = window.innerWidth / window.innerHeight;
-    realcamera.updateProjectionMatrix();
-    effect.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth, window.innerHeight );
     controls.handleResize();
 }
-
-function keyPressed(event) {
-    if (event.keyCode === 72) { // H
-        guiVisible = !guiVisible;
-        document.getElementById('container').style.display = guiVisible ? "block" : "none";
+function generateHeight( width, height ) {
+    var data = [], perlin = new ImprovedNoise(),
+        size = width * height, quality = 2, z = Math.random() * 100;
+    for ( var j = 0; j < 4; j ++ ) {
+        if ( j === 0 ) for ( var i = 0; i < size; i ++ ) data[ i ] = 0;
+        for ( var i = 0; i < size; i ++ ) {
+            var x = i % width, y = ( i / width ) | 0;
+            data[ i ] += perlin.noise( x / quality, y / quality, z ) * quality;
+        }
+        quality *= 4;
     }
+    return data;
 }
-
+function getY( x, z ) {
+    return ( data[ x + z * worldWidth ] * 0.2 ) | 0;
+}
+//
 function animate() {
     requestAnimationFrame( animate );
-
-    var t = clock.getElapsedTime();
-
-    for (var i=0; i<meshes.length; i++) {
-        var c = Math.floor(i % cols);
-        var r = Math.floor(i / cols);
-        meshparent2[i].rotation.y = (c * 3.142 * 2 / cols);
-        meshparent[i].rotation.x = ((r+10) * 3.142 * 2 / (rows+20));
-        meshes[i].position.z = 1400 - 1350 * perlin.noise(c*8/cols,r*8/rows,t/2);
-    }
-
+    render();
+    stats.update();
+}
+function render() {
     controls.update( clock.getDelta() );
-    controls2.update( clock.getDelta() );
-
-    effect.render( scene, camera );
+    renderer.render( scene, camera );
 }
