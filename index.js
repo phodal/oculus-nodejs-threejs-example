@@ -64,12 +64,12 @@ var id = 1;
 wss.on("connection", function (ws) {
     function emitOrientation() {
         id = id + 1;
-        var deviceOrientation = manager.getDeviceQuatSync();
+        var deviceQuat = manager.getDeviceQuatSync();
         var devicePosition = manager.getDevicePositionSync();
 
         ws.send(JSON.stringify({
             id: id,
-            quat: deviceOrientation,
+            quat: deviceQuat,
             position: devicePosition
         }));
 
