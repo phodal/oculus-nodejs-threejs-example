@@ -1,0 +1,6 @@
+src/Debug
+src/build
+build/*
+*.user
+.idea
+bower_components

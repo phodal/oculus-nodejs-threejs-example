@@ -1,0 +1,21 @@
+{
+  "name": "vr",
+  "homepage": "https://github.com/phodal/vr",
+  "authors": [
+    "Fengda HUANG <h@phodal.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "three.js": "~0.73.0"
+  }
+}
