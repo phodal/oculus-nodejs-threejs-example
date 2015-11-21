@@ -2,23 +2,32 @@ if ( ! Detector.webgl ) {
     Detector.addGetWebGLMessage();
     document.getElementById( 'container' ).innerHTML = "";
 }
-var container, stats;
+var container, stats, effect, oculusControl;
 var camera, controls, scene, renderer;
 var mesh;
 var worldWidth = 128, worldDepth = 128,
     worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2,
     data = generateHeight( worldWidth, worldDepth );
 var clock = new THREE.Clock();
+
+var tmpQuaternion = new THREE.Quaternion();
+
 init();
 animate();
+
 function init() {
     container = document.getElementById( 'container' );
+
     camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
     camera.position.y = getY( worldHalfWidth, worldHalfDepth ) * 100 + 100;
-    controls = new THREE.FirstPersonControls( camera );
-    controls.movementSpeed = 1000;
-    controls.lookSpeed = 0.125;
-    controls.lookVertical = true;
+
+    //controls = new THREE.FirstPersonControls( camera );
+    oculusControl = new THREE.OculusControls( camera );
+
+    //controls.movementSpeed = 1000;
+    //controls.lookSpeed = 0.125;
+    //controls.lookVertical = true;
+
     scene = new THREE.Scene();
     // sides
     var matrix = new THREE.Matrix4();
@@ -27,20 +36,24 @@ function init() {
     pxGeometry.attributes.uv.array[ 3 ] = 0.5;
     pxGeometry.rotateY( Math.PI / 2 );
     pxGeometry.translate( 50, 0, 0 );
+
     var nxGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
     nxGeometry.attributes.uv.array[ 1 ] = 0.5;
     nxGeometry.attributes.uv.array[ 3 ] = 0.5;
     nxGeometry.rotateY( - Math.PI / 2 );
     nxGeometry.translate( - 50, 0, 0 );
+
     var pyGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
     pyGeometry.attributes.uv.array[ 5 ] = 0.5;
     pyGeometry.attributes.uv.array[ 7 ] = 0.5;
     pyGeometry.rotateX( - Math.PI / 2 );
     pyGeometry.translate( 0, 50, 0 );
+
     var pzGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
     pzGeometry.attributes.uv.array[ 1 ] = 0.5;
     pzGeometry.attributes.uv.array[ 3 ] = 0.5;
     pzGeometry.translate( 0, 0, 50 );
+
     var nzGeometry = new THREE.PlaneBufferGeometry( 100, 100 );
     nzGeometry.attributes.uv.array[ 1 ] = 0.5;
     nzGeometry.attributes.uv.array[ 3 ] = 0.5;
@@ -81,11 +94,14 @@ function init() {
             }
         }
     }
+
     var geometry = new THREE.BufferGeometry().fromGeometry( tmpGeometry );
     geometry.computeBoundingSphere();
+
     var texture = THREE.ImageUtils.loadTexture( './js/textures/minecraft/atlas.png' );
     texture.magFilter = THREE.NearestFilter;
     texture.minFilter = THREE.LinearMipMapLinearFilter;
+
     var mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { map: texture } ) );
     scene.add( mesh );
     var ambientLight = new THREE.AmbientLight( 0xcccccc );
@@ -93,10 +109,16 @@ function init() {
     var directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
     directionalLight.position.set( 1, 1, 0.5 ).normalize();
     scene.add( directionalLight );
+
+
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor( 0xbfd1e5 );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
+
+    effect = new THREE.OculusRiftEffect(renderer, { worldScale: 100 });
+    effect.setSize(window.innerWidth, window.innerHeight);
+
     container.innerHTML = "";
     container.appendChild( renderer.domElement );
     stats = new Stats();
@@ -105,12 +127,30 @@ function init() {
     container.appendChild( stats.domElement );
     //
     window.addEventListener( 'resize', onWindowResize, false );
+
+    oculusControl.connect();
 }
+
+function setAngles(r) {
+    console.log('Set angles', r.quat);
+    tmpQuaternion.set(r.quat.x, r.quat.y, r.quat.z, r.quat.w);
+}
+
+function poll() {
+    $.get('http://localhost:3000/', function (r) {
+        setAngles(r);
+        setTimeout(poll, 10);
+    });
+}
+
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    controls.handleResize();
+
+    effect.setSize(window.innerWidth, window.innerHeight);
+
+    //renderer.setSize( window.innerWidth, window.innerHeight );
+    //controls.handleResize();
 }
 function generateHeight( width, height ) {
     var data = [], perlin = new ImprovedNoise(),
@@ -135,6 +175,14 @@ function animate() {
     stats.update();
 }
 function render() {
-    controls.update( clock.getDelta() );
-    renderer.render( scene, camera );
+    //controls.update( clock.getDelta() );
+
+    oculusControl.update( clock.getDelta() );
+    camera.useQuaternion = true;
+    camera.quaternion = new THREE.Quaternion(tmpQuaternion.x, tmpQuaternion.y, tmpQuaternion.z, tmpQuaternion.w);
+    // camera.quaternion.normalize();
+    camera.matrixWorldNeedsUpdate = true;
+
+    effect.render(scene, camera);
+    //renderer.render( scene, camera );
 }
