@@ -60,6 +60,10 @@ app.get("/orientation", function (req, res) {
 var wss = new WebSocketServer({server: http});
 var id = 1;
 
+wss.on('open', function open() {
+    console.log('connected');
+});
+
 // On socket connection set up event emitters to automatically push the HMD orientation data
 wss.on("connection", function (ws) {
     function emitOrientation() {
@@ -67,12 +71,13 @@ wss.on("connection", function (ws) {
         var deviceQuat = manager.getDeviceQuatSync();
         var devicePosition = manager.getDevicePositionSync();
 
-        ws.send(JSON.stringify({
+        var data = JSON.stringify({
             id: id,
             quat: deviceQuat,
             position: devicePosition
-        }));
+        });
 
+        ws.send(data);
     }
 
     var orientation = setInterval(emitOrientation, 1000);
@@ -82,8 +87,10 @@ wss.on("connection", function (ws) {
         orientation = setInterval(emitOrientation, data);
     });
 
-    ws.on("disconnect", function () {
+    ws.on("close", function () {
+        setTimeout(null, 500);
         clearInterval(orientation);
+        console.log("disconnect");
     });
 });
 
