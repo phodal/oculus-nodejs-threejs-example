@@ -11,7 +11,7 @@
  limitations under the License.
  */
 
-THREE.DK2Controls = function(camera) {
+THREE.DK2Controls = function (camera) {
 
     this.camera = camera;
     this.ws;
@@ -23,7 +23,7 @@ THREE.DK2Controls = function(camera) {
     this.headPos = new THREE.Vector3();
     this.headQuat = new THREE.Quaternion();
 
-    this.translationSpeed = 5;
+    this.translationSpeed = 200;
 
     this.wasd = {
         left: false,
@@ -135,8 +135,8 @@ THREE.DK2Controls = function(camera) {
 
     };
 
-    window.addEventListener('keydown', bind(this, this.onKeyDown), false);
-    window.addEventListener('keyup', bind(this, this.onKeyUp), false);
+    window.addEventListener('keydown', this.onKeyDown.bind(this), false);
+    window.addEventListener('keyup', this.onKeyUp.bind(this), false);
 
     function bind(scope, fn) {
 
