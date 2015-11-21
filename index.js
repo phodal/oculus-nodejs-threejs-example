@@ -1,6 +1,7 @@
 var hmd = require("node-hmd"),
     express = require("express"),
-    http = require("http");
+    http = require("http"),
+    path = require('path');
 
 // Create HMD manager object
 console.info("Attempting to load node-hmd driver: oculusrift");
@@ -12,6 +13,18 @@ if (typeof(manager) === "undefined") {
 // Instantiate express server
 var app = express();
 app.set('port', process.env.PORT || 3000);
+
+app.use(express.static(path.join(__dirname + '/', 'public')));
+app.set('views', path.join(__dirname + '/public/', 'views'));
+app.set('view engine', 'jade');
+
+app.get('/demo', function (req, res) {
+    'use strict';
+    res.render('demo', {
+        title: 'Home'
+    });
+});
+
 
 app.get("/", function (req, res) {
     res.header('Access-Control-Allow-Origin', '*');

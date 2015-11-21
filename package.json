@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/phodal/vr#readme",
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "jade": "^1.11.0"
   }
 }
