@@ -37,7 +37,7 @@ THREE.OculusControls = function ( object ) {
     }
 
     this.pollOnce = function() {
-        this.loadAjaxJSON('http://localhost:50000', bind(this, this.gotCoordinates));
+        this.loadAjaxJSON('http://localhost:3000', bind(this, this.gotCoordinates));
     }
 
     this.queuePoll = function() {
