@@ -22,7 +22,7 @@ function init() {
     camera.position.y = getY( worldHalfWidth, worldHalfDepth ) * 100 + 100;
 
     //controls = new THREE.FirstPersonControls( camera );
-    oculusControl = new THREE.OculusControls( camera );
+    oculusControl = new THREE.DK2Controls( camera );
 
     //controls.movementSpeed = 1000;
     //controls.lookSpeed = 0.125;
@@ -128,7 +128,6 @@ function init() {
     //
     window.addEventListener( 'resize', onWindowResize, false );
 
-    oculusControl.connect();
 }
 
 function setAngles(r) {

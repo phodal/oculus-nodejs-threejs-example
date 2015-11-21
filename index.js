@@ -1,6 +1,7 @@
 var hmd = require("node-hmd"),
     express = require("express"),
-    http = require("http"),
+    http = require("http").createServer(),
+    WebSocketServer = require('ws').Server,
     path = require('path');
 
 // Create HMD manager object
@@ -54,7 +55,40 @@ app.get("/orientation", function (req, res) {
     });
 });
 
+
+// Attach socket.io listener to the server
+var wss = new WebSocketServer({server: http});
+var id = 1;
+
+// On socket connection set up event emitters to automatically push the HMD orientation data
+wss.on("connection", function (ws) {
+    function emitOrientation() {
+        id = id + 1;
+        var deviceOrientation = manager.getDeviceQuatSync();
+        var devicePosition = manager.getDevicePositionSync();
+
+        ws.send(JSON.stringify({
+            id: id,
+            quat: deviceOrientation,
+            position: devicePosition
+        }));
+
+    }
+
+    var orientation = setInterval(emitOrientation, 1000);
+
+    ws.on("message", function(data) {
+        clearInterval(orientation);
+        orientation = setInterval(emitOrientation, data);
+    });
+
+    ws.on("disconnect", function () {
+        clearInterval(orientation);
+    });
+});
+
 // Launch express server
-http.createServer(app).listen(3000, function () {
+http.on('request', app);
+http.listen(3000, function () {
     console.log("Express server listening on port 3000");
 });

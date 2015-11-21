@@ -33,7 +33,7 @@ THREE.DK2Controls = function(camera) {
     };
 
     var that = this;
-    var ws = new WebSocket("ws://localhost:8888/ws");
+    var ws = new WebSocket("ws://localhost:3000/");
     ws.onopen = function () {
         console.log("### Connected ####");
     };
@@ -89,16 +89,18 @@ THREE.DK2Controls = function(camera) {
 
     this.update = function (delta) {
 
-        if (this.sensorData) {
-            var id = this.sensorData[0];
+        var sensorData = this.sensorData;
+        if (sensorData) {
+            var id = sensorData.id;
             if (id > this.lastId) {
-                this.headPos.set(this.sensorData[1] * 10 - 0.4, this.sensorData[2] * 10 + 1.75, this.sensorData[3] * 10 + 10);
-                this.headQuat.set(this.sensorData[4], this.sensorData[5], this.sensorData[6], this.sensorData[7]);
+                console.log(sensorData.quat, sensorData.position);
+                this.headPos.set(sensorData.position.x * 10 - 0.4, sensorData.position.y * 10 + 1.75, sensorData.position.z * 10 + 10);
+                console.log(this.headPos);
+                this.headQuat.set(sensorData.quat.x, sensorData.quat.y, sensorData.quat.z, sensorData.quat.w);
 
+                console.log(this.headQuat);
                 this.camera.setRotationFromQuaternion(this.headQuat);
                 this.controller.setRotationFromMatrix(this.camera.matrix);
-
-
             }
             this.lastId = id;
         }

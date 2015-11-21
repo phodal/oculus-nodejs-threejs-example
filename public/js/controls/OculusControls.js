@@ -34,15 +34,15 @@ THREE.OculusControls = function ( object ) {
     this.gotCoordinates = function( r ) {
         this.headquat.set(r.quat.x, r.quat.y, r.quat.z, r.quat.w);
         this.queuePoll();
-    }
+    };
 
     this.pollOnce = function() {
         this.loadAjaxJSON('http://localhost:3000', bind(this, this.gotCoordinates));
-    }
+    };
 
     this.queuePoll = function() {
         setTimeout(bind(this, this.pollOnce), 10);
-    }
+    };
 
     this.update = function( delta ) {
         if ( this.freeze ) {
@@ -56,7 +56,7 @@ THREE.OculusControls = function ( object ) {
         return function () {
             fn.apply( scope, arguments );
         };
-    };
+    }
 
     this.connect = function() {
         this.queuePoll();
