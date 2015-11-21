@@ -77,12 +77,14 @@ wss.on("connection", function (ws) {
             position: devicePosition
         });
 
-        ws.send(data);
+        ws.send(data, function (error) {
+            //it's a bug of websocket, see in https://github.com/websockets/ws/issues/337
+        });
     }
 
     var orientation = setInterval(emitOrientation, 1000);
 
-    ws.on("message", function(data) {
+    ws.on("message", function (data) {
         clearInterval(orientation);
         orientation = setInterval(emitOrientation, data);
     });
