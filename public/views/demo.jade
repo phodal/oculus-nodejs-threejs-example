@@ -2,5 +2,21 @@ doctype html
 html
     head
         title= title
+
+        link(href='index.css', rel='stylesheet')
+        script(src='./js/libs/jquery.min.js')
+        script(src='./js/libs/three.min.js')
+
+        script(src='./js/ImprovedNoise.js')
+        script(src='./js/Detector.js')
+
+        script(src='./js/effects/OculusRiftEffect.js')
+        script(src='./js/effects/AsciiEffect.js')
+        script(src='./js/effects/AnaglyphEffect.js')
+
+        script(src='./js/controls/FirstPersonControls.js')
+        script(src='./js/controls/OculusControls.js')
     body
-        h1 test
+        div(id="container")
+
+        script(src='./js/app.js')

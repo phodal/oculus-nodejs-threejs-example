@@ -1,0 +1,10 @@
+
+body {
+    color: rgb(168, 148, 0);
+    font-family: Monospace;
+    font-size: 13px;
+    text-align: center;
+    background-color: #000000;
+    margin: 0px;
+    overflow: hidden;
+}
