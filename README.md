@@ -6,9 +6,9 @@
 
 在上周五——也是Hackay的第三天的时候，突然有了点小灵感，便将闲置在公司的Oculus DK2借回家了——已经都是灰尘了~~。
 
-在尝试一个晚上开发环境搭建后，我放弃了。一是没有属于自己的电脑（如果Raspberry Pi不算的话）——没有Windows、没有GNU/Linux，二是公司配的电脑是Mac OS。对于嵌入式开发和游戏开发来说，Mac OS简直是手机中的Windows Phone——坑爹的LLVM、GCC(Mac OS )、OpenGL、OGLPlus、C++11。尝试了一晚上后，放弃了原生的念头。
+在尝试一个晚上的开发环境搭建后，我放弃了开发原生应用的想法。一是没有属于自己的电脑（如果Raspberry Pi II不算的话）——没有Windows、没有GNU/Linux，二是公司配的电脑是Mac OS。对于嵌入式开发和游戏开发来说，Mac OS简直是手机中的Windows Phone——坑爹的LLVM、GCC(Mac OS )、OpenGL、OGLPlus、C++11。并且官方对Mac OS和Linux的SDK的支持已经落后了好几个世纪。
 
-Web的开发环境到底还是比较容易搭建的。
+说到底，还是Web的开发环境到底还是比较容易搭建的。
 
 ##Node Oculus Services
 
