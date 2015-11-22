@@ -2,15 +2,28 @@
 
 本作品采用[知识共享署名-非商业性使用 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc/4.0/)进行许可。© 2015 [Phodal Huang](http://www.phodal.com) 。。。[待我代码编成，娶你为妻可好](http://www.xuntayizhan.com/person/ji-ke-ai-qing-zhi-er-shi-dai-wo-dai-ma-bian-cheng-qu-ni-wei-qi-ke-hao-wan/) @[花仲马](http://weibo.com/hug8217)
 
+
 > Oculus Rift 是一款为电子游戏设计的头戴式显示器。这是一款虚拟现实设备。这款设备很可能改变未来人们游戏的方式。
 
-在上周五——也是Hackay的第三天的时候，突然有了点小灵感，便将闲置在公司的Oculus DK2借回家了——已经都是灰尘了~~。
+周五Hackday Showcase的时候，突然有了点小灵感，便将闲置在公司的Oculus DK2借回家了——已经都是灰尘了~~。
 
 在尝试一个晚上的开发环境搭建后，我放弃了开发原生应用的想法。一是没有属于自己的电脑（如果Raspberry Pi II不算的话）——没有Windows、没有GNU/Linux，二是公司配的电脑是Mac OS。对于嵌入式开发和游戏开发来说，Mac OS简直是手机中的Windows Phone——坑爹的LLVM、GCC(Mac OS )、OpenGL、OGLPlus、C++11。并且官方对Mac OS和Linux的SDK的支持已经落后了好几个世纪。
 
-说到底，还是Web的开发环境到底还是比较容易搭建的。
+说到底，还是Web的开发环境到底还是比较容易搭建的。这个repo的最后效果图如下所示:
+
+![最后效果图](docs/demo.jpg)
+
+效果：
+
+1.  WASD控制前进、后退等等。
+2. 旋转头部 =  真实的世界。
+3. 附加效果： 看久了头晕。
+
+现在，让我们开始构建吧。
 
 ##Node Oculus Services
+
+这里，我们所要做的事情便是将传感器返回来的四元数(Quaternions)与欧拉角(Euler angles)以API的形式返回到前端。
 
 ###安装Node NMD
 
