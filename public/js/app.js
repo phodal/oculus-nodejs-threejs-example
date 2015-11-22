@@ -3,19 +3,17 @@ if ( ! Detector.webgl ) {
     document.getElementById( 'container' ).innerHTML = "";
 }
 var container, stats, effect, oculusControl;
-var camera, controls, scene, renderer;
+var camera, scene, renderer;
 var mesh;
 var worldWidth = 128, worldDepth = 128,
     worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2,
     data = generateHeight( worldWidth, worldDepth );
 var clock = new THREE.Clock();
 
-var tmpQuaternion = new THREE.Quaternion();
-
 init();
 animate();
 
-var dae, particleLight;
+var dae;
 
 var loader = new THREE.ColladaLoader();
 loader.options.convertUpAxis = true;
@@ -151,18 +149,6 @@ function init() {
 
 }
 
-function setAngles(r) {
-    console.log('Set angles', r.quat);
-    tmpQuaternion.set(r.quat.x, r.quat.y, r.quat.z, r.quat.w);
-}
-
-function poll() {
-    $.get('http://localhost:3000/', function (r) {
-        setAngles(r);
-        setTimeout(poll, 10);
-    });
-}
-
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -201,8 +187,6 @@ function render() {
     THREE.AnimationHandler.update( clock.getDelta() * 100 );
 
     camera.useQuaternion = true;
-    camera.quaternion = new THREE.Quaternion(tmpQuaternion.x, tmpQuaternion.y, tmpQuaternion.z, tmpQuaternion.w);
-    // camera.quaternion.normalize();
     camera.matrixWorldNeedsUpdate = true;
 
     effect.render(scene, camera);
