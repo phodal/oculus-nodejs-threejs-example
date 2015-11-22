@@ -39,12 +39,7 @@ function init() {
     camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
     camera.position.y = getY( worldHalfWidth, worldHalfDepth ) * 100 + 100;
 
-    //controls = new THREE.FirstPersonControls( camera );
     oculusControl = new THREE.DK2Controls( camera );
-
-    //controls.movementSpeed = 1000;
-    //controls.lookSpeed = 0.125;
-    //controls.lookVertical = true;
 
     scene = new THREE.Scene();
     // sides
@@ -154,10 +149,8 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     effect.setSize(window.innerWidth, window.innerHeight);
-
-    //renderer.setSize( window.innerWidth, window.innerHeight );
-    //controls.handleResize();
 }
+
 function generateHeight( width, height ) {
     var data = [], perlin = new ImprovedNoise(),
         size = width * height, quality = 2, z = Math.random() * 100;
@@ -181,8 +174,6 @@ function animate() {
     stats.update();
 }
 function render() {
-    //controls.update( clock.getDelta() );
-
     oculusControl.update( clock.getDelta() );
     THREE.AnimationHandler.update( clock.getDelta() * 100 );
 
@@ -190,5 +181,4 @@ function render() {
     camera.matrixWorldNeedsUpdate = true;
 
     effect.render(scene, camera);
-    //renderer.render( scene, camera );
 }
