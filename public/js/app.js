@@ -103,8 +103,6 @@ function init() {
     directionalLight.position.set( 1, 1, 0.5 ).normalize();
     scene.add( directionalLight );
 
-    scene.add( dae );
-
     renderer = new THREE.WebGLRenderer();
     renderer.setClearColor( 0xbfd1e5 );
     renderer.setPixelRatio( window.devicePixelRatio );
