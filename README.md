@@ -402,3 +402,76 @@ function render() {
 ```
 
 最后，添加相应的KeyHandler就好了~~。
+
+###Three.js KeyHandler
+
+KeyHandler对于习惯了Web开发的人来说就比较简单了:
+
+```javascript
+this.onKeyDown = function (event) {
+    switch (event.keyCode) {
+        case 87: //W
+            this.wasd.up = true;
+            break;
+        case 83: //S
+            this.wasd.down = true;
+            break;
+        case 68: //D
+            this.wasd.right = true;
+            break;
+        case 65: //A
+            this.wasd.left = true;
+            break;
+    }
+};
+
+this.onKeyUp = function (event) {
+    switch (event.keyCode) {
+        case 87: //W
+            this.wasd.up = false;
+            break;
+        case 83: //S
+            this.wasd.down = false;
+            break;
+        case 68: //D
+            this.wasd.right = false;
+            break;
+        case 65: //A
+            this.wasd.left = false;
+            break;
+    }
+};
+```    
+
+然后就是万恶的if语句了:
+
+```javascript
+if (this.wasd.up) {
+    this.controller.translateZ(-this.translationSpeed * delta);
+}
+
+if (this.wasd.down) {
+    this.controller.translateZ(this.translationSpeed * delta);
+}
+
+if (this.wasd.right) {
+    this.controller.translateX(this.translationSpeed * delta);
+}
+
+if (this.wasd.left) {
+    this.controller.translateX(-this.translationSpeed * delta);
+}
+
+this.camera.position.addVectors(this.controller.position, this.headPos);
+
+if (this.camera.position.y < -10) {
+    this.camera.position.y = -10;
+}
+```
+
+快接上你的HMD试试吧~~
+
+##结语
+
+如我在[《RePractise前端篇: 前端演进史》](https://github.com/phodal/repractise/blob/gh-pages/chapters/frontend.md)一文中所说的，这似乎就是新的"前端"。
+
