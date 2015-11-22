@@ -1,6 +1,13 @@
-#Oculus  + Node.js  + Three.js 打造VR世界
+ #Oculus  + Node.js  + Three.js 打造VR世界
 
 > Oculus Rift 是一款为电子游戏设计的头戴式显示器。这是一款虚拟现实设备。这款设备很可能改变未来人们游戏的方式。
+
+![cc](https://i.creativecommons.org/l/by-nc/4.0/88x31.png)
+
+本作品采用[知识共享署名-非商业性使用 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc/4.0/)进行许可。
+
+© 2015 [Phodal Huang](http://www.phodal.com)。[待我代码编成，娶你为妻可好](http://www.xuntayizhan.com/person/ji-ke-ai-qing-zhi-er-shi-dai-wo-dai-ma-bian-cheng-qu-ni-wei-qi-ke-hao-wan/)。
+
 
 在上周五——也是Hackay的第三天的时候，突然有了点小灵感，便将闲置在公司的Oculus DK2借回家了——已经都是灰尘了~~。
 
@@ -400,13 +407,3 @@ function render() {
 ```
 
 最后，添加相应的KeyHandler就好了~~。
-
-##Tech Stack
-
-1. Node.js
-2. WebSocket
-3. Express + Jade
-4. Three.js
-5. Node-HDM
- 
- 
