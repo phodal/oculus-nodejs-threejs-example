@@ -13,26 +13,6 @@ var clock = new THREE.Clock();
 init();
 animate();
 
-var dae;
-
-var loader = new THREE.ColladaLoader();
-loader.options.convertUpAxis = true;
-loader.load( './models/monster.dae', function ( collada ) {
-    dae = collada.scene;
-    dae.traverse( function ( child ) {
-        if ( child instanceof THREE.SkinnedMesh ) {
-            var animation = new THREE.Animation( child, child.geometry.animation );
-            animation.play();
-        }
-    } );
-    dae.scale.x = dae.scale.y = dae.scale.z = 0.002;
-    dae.updateMatrix();
-
-    init();
-    animate();
-
-} );
-
 function init() {
     container = document.getElementById( 'container' );
 
