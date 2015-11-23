@@ -13,7 +13,7 @@ if (typeof(manager) === "undefined") {
 }
 // Instantiate express server
 var app = express();
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3030);
 
 app.use(express.static(path.join(__dirname + '/', 'public')));
 app.set('views', path.join(__dirname + '/public/', 'views'));
@@ -98,6 +98,6 @@ wss.on("connection", function (ws) {
 
 // Launch express server
 http.on('request', app);
-http.listen(3000, function () {
+http.listen(3030, function () {
     console.log("Express server listening on port 3000");
 });

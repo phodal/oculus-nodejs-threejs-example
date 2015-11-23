@@ -108,8 +108,8 @@ function init() {
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    effect = new THREE.OculusRiftEffect(renderer, { worldScale: 100 });
-    effect.setSize(window.innerWidth, window.innerHeight);
+    //effect = new THREE.OculusRiftEffect(renderer, { worldScale: 100 });
+    //effect.setSize(window.innerWidth, window.innerHeight);
 
     container.innerHTML = "";
     container.appendChild( renderer.domElement );
@@ -126,7 +126,7 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-    effect.setSize(window.innerWidth, window.innerHeight);
+    //effect.setSize(window.innerWidth, window.innerHeight);
 }
 
 function generateHeight( width, height ) {
@@ -153,10 +153,11 @@ function animate() {
 }
 function render() {
     oculusControl.update( clock.getDelta() );
-    THREE.AnimationHandler.update( clock.getDelta() * 100 );
+    //THREE.AnimationHandler.update( clock.getDelta() * 100 );
 
     camera.useQuaternion = true;
     camera.matrixWorldNeedsUpdate = true;
 
-    effect.render(scene, camera);
+    //effect.render(scene, camera);
+    renderer.render(scene, camera);
 }
