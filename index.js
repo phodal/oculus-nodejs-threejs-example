@@ -4,6 +4,11 @@ var hmd = require("node-hmd"),
     WebSocketServer = require('ws').Server,
     path = require('path');
 
+var leapjs = require('leapjs');
+
+var controller = new leapjs.Controller();
+
+
 // Create HMD manager object
 console.info("Attempting to load node-hmd driver: oculusrift");
 var manager = hmd.createManager("oculusrift");
@@ -13,7 +18,7 @@ if (typeof(manager) === "undefined") {
 }
 // Instantiate express server
 var app = express();
-app.set('port', process.env.PORT || 3030);
+app.set('port', process.env.PORT || 3000);
 
 app.use(express.static(path.join(__dirname + '/', 'public')));
 app.set('views', path.join(__dirname + '/public/', 'views'));
@@ -55,6 +60,20 @@ app.get("/orientation", function (req, res) {
     });
 });
 
+
+controller.on('connect', function(data) {
+    console.log("Successfully connected.");
+});
+
+controller.on('streamingStarted', function(data) {
+    console.log("A Leap device has been connected.");
+});
+
+controller.on('streamingStopped', function(data) {
+    console.log("A Leap device has been disconnected.");
+});
+
+controller.connect();
 
 // Attach socket.io listener to the server
 var wss = new WebSocketServer({server: http});
@@ -98,6 +117,6 @@ wss.on("connection", function (ws) {
 
 // Launch express server
 http.on('request', app);
-http.listen(3030, function () {
+http.listen(3000, function () {
     console.log("Express server listening on port 3000");
 });
