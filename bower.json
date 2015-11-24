@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "three.js": "~0.73.0",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "leapjs": "~0.6.4"
   }
 }

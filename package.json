@@ -19,6 +19,7 @@
   "dependencies": {
     "express": "^4.13.3",
     "jade": "^1.11.0",
+    "leapjs": "^0.6.4",
     "ws": "^0.8.0"
   }
 }
