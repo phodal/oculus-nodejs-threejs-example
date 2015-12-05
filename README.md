@@ -1,8 +1,5 @@
 #Oculus  + Node.js  + Three.js 打造VR世界
 
-本作品采用[知识共享署名-非商业性使用 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc/4.0/)进行许可。© 2015 [Phodal Huang](http://www.phodal.com) 。。。[待我代码编成，娶你为妻可好](http://www.xuntayizhan.com/person/ji-ke-ai-qing-zhi-er-shi-dai-wo-dai-ma-bian-cheng-qu-ni-wei-qi-ke-hao-wan/) @[花仲马](http://weibo.com/hug8217)
-
-
 > Oculus Rift 是一款为电子游戏设计的头戴式显示器。这是一款虚拟现实设备。这款设备很可能改变未来人们游戏的方式。
 
 周五Hackday Showcase的时候，突然有了点小灵感，便将闲置在公司的Oculus DK2借回家了——已经都是灰尘了~~。
@@ -487,4 +484,11 @@ if (this.camera.position.y < -10) {
 ##结语
 
 如我在[《RePractise前端篇: 前端演进史》](https://github.com/phodal/repractise/blob/gh-pages/chapters/frontend.md)一文中所说的，这似乎就是新的"前端"。
+
+##License
+
+本作品采用[知识共享署名-非商业性使用 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc/4.0/)进行许可。© 2015 [Phodal Huang](http://www.phodal.com)
+
+[待我代码编成，娶你为妻可好](http://www.xuntayizhan.com/person/ji-ke-ai-qing-zhi-er-shi-dai-wo-dai-ma-bian-cheng-qu-ni-wei-qi-ke-hao-wan/) @[花仲马](http://weibo.com/hug8217)
+
 
