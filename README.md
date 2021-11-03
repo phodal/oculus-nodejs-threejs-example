@@ -231,7 +231,7 @@ ws.send(data, function (error) {
 
 在之前的版本中，Three.js都提供了Oculus的Demo，当然只能用来看。并且交互的接口是HTTP，感觉很难玩~~。
 
-##Three.js DK2Controls
+## Three.js DK2Controls
 
 这时，我们就需要根据上面传过来的``四元数``(Quaternions)与欧拉角(Euler angles)来作相应的处理。
 
