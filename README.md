@@ -1,4 +1,4 @@
-#Oculus  + Node.js  + Three.js 打造VR世界
+# Oculus  + Node.js  + Three.js 打造VR世界
 
 > Oculus Rift 是一款为电子游戏设计的头戴式显示器。这是一款虚拟现实设备。这款设备很可能改变未来人们游戏的方式。
 
@@ -18,11 +18,11 @@
 
 现在，让我们开始构建吧。
 
-##Node Oculus Services
-
+## Node Oculus Services
+ 
 这里，我们所要做的事情便是将传感器返回来的四元数(Quaternions)与欧拉角(Euler angles)以API的形式返回到前端。
 
-###安装Node NMD
+### 安装Node NMD
 
 Node.js上有一个Oculus的插件名为node-hmd，hmd即面向头戴式显示器。它就是Oculus SDK的Node接口，虽说年代已经有些久远了，但是似乎是可以用的——官方针对 Mac OS和Linux的SDK也已经很久没有更新了。
 
@@ -69,7 +69,7 @@ node-hmd@0.2.1 node_modules/node-hmd
 
 不过，有最后一行就够了。
 
-###Node.js Oculus Hello，World
+### Node.js Oculus Hello，World
 
 现在，我们就可以写一个Hello，World了，直接来官方的示例~~。
 
@@ -122,7 +122,7 @@ manager.getDeviceOrientation(function(err, deviceOrientation) {
 
 接着，我们就可以实时返回这些数据了。
 
-###Node Oculus WebSocket
+### Node Oculus WebSocket
 
 在网上看到[http://laht.info/WebGL/DK2Demo.html](http://laht.info/WebGL/DK2Demo.html)这个虚拟现实的电影，并且发现了它有一个WebSocket，然而是Java写的，只能拿来当参考代码。
 
@@ -221,7 +221,7 @@ ws.send(data, function (error) {
 
 上面有一行注释是我之前一直遇到的一个坑，总之需要callback就是了。
 
-##Three.js + Oculus Effect  + DK2 Control
+## Three.js + Oculus Effect  + DK2 Control
 
 在最后我们需要如下的画面：
 
@@ -251,7 +251,7 @@ ws.send(data, function (error) {
 }
 ```
 
-###欧拉角与四元数
+### 欧拉角与四元数
 
 （ps: 如果没copy好，麻烦提出正确的说法，原谅我这个挂过高数的人。我只在高中的时候，看到这些资料。）
 
@@ -298,7 +298,7 @@ this.controller.setRotationFromMatrix(this.camera.matrix);
 ![Oculus 6050](docs/mpu6050.jpg)
 
 
-###Three.js  DK2Controls
+### Three.js  DK2Controls
 
 虽然下面的代码不是我写的，但是还是简单地说一下。
 
@@ -413,7 +413,7 @@ function render() {
 
 最后，添加相应的KeyHandler就好了~~。
 
-###Three.js KeyHandler
+### Three.js KeyHandler
 
 KeyHandler对于习惯了Web开发的人来说就比较简单了:
 
@@ -481,11 +481,11 @@ if (this.camera.position.y < -10) {
 
 快接上你的HMD试试吧~~
 
-##结语
+## 结语
 
 如我在[《RePractise前端篇: 前端演进史》](https://github.com/phodal/repractise/blob/gh-pages/chapters/frontend.md)一文中所说的，这似乎就是新的"前端"。
 
-##License
+## License
 
 本作品采用[知识共享署名-非商业性使用 4.0 国际许可协议](http://creativecommons.org/licenses/by-nc/4.0/)进行许可。© 2015 [Phodal Huang](http://www.phodal.com)
 
